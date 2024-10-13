@@ -1,8 +1,5 @@
 import asyncio
-
 import keyboard
-
-from main import times
 import pyperclip
 
 class AIter:   #упрощенный аналог range для async for
@@ -22,40 +19,29 @@ class AIter:   #упрощенный аналог range для async for
             raise StopAsyncIteration
         self.i += 1
         return i
-c = 0
-first_data = ''
+
 second_data = ''
 
 def get_selected_text():
-    global first_data, second_data, c
+    global second_data
     # Получаем текст из буфера обмена
     selected_text = pyperclip.paste()
-    print(c)
-    if c == 0:
-        first_data = selected_text
-        c +=1
-    elif c == 1:
-        second_data = selected_text
-        c = 0
+    second_data = selected_text
+
 
 def paste_second():
     global first_data, second_data, c
-    keyboard.write(second_data)
-
-def paste_first():
-    global first_data, second_data, c
-    keyboard.write(first_data)
+    keyboard.write("\b\b"+second_data)
 
 keyboard.add_hotkey("ctrl+c", get_selected_text)
-keyboard.add_hotkey("ctrl+s", paste_first)
-keyboard.add_hotkey("ctrl+q", paste_second)
+keyboard.add_hotkey("c+v", paste_second)
 
 
 async def run():
-    async for i in AIter(65):
+
+    async for i in AIter(6500):
         await asyncio.sleep(0.5)
 
 
 asyncio.run(run())
-
 
